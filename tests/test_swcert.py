@@ -154,7 +154,7 @@ class TestDomain():
         add_domain(cert_list=tmpdir, domain=domain)
         assert os.path.isfile(domain)
 
-    def test_deldomain(self, tmpdir):
+    def test_delete_domain(self, tmpdir):
         domain = os.path.join(tmpdir, 'domain.lan')
         open(domain, 'a').close()
         delete_domain(cert_list=tmpdir, domain=domain)

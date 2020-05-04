@@ -211,7 +211,7 @@ def issue_cert(ca_key=CA_KEY, ca_crt=CA_CRT, cert_csr=CERT_CSR, cert_key=CERT_KE
 def restart_nginx():
     print('Restart nginx - ', end='')
     try:
-        subprocess.run(['service', 'nginx', 'restart'], check=True, capture_output=True)
+        subprocess.run(['service', 'nginx', 'reload'], check=True, capture_output=True)
     except subprocess.CalledProcessError as e:
         print('err')
         sys.exit(e.stderr.decode('utf-8'))

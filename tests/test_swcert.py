@@ -1,18 +1,45 @@
+import getpass
 import os
 import os.path
+import pwd
 import subprocess
 
 import pytest
 
-from swcert import (NSS_NAME, add_domain, check_crt, check_key, check_nss,
-                    copy, delete_domain, make_ca_crt, make_ca_key, nss_install,
-                    nss_find)
+from swcert import (NSS_NAME, add_domain, check_ca_key, check_crt, copy,
+                    delete_domain, make_ca_crt, make_ca_key, nss_check_cert,
+                    nss_find, nss_install_cert, set_real_owner, subproc)
+
+
+class TestSubproc():
+    def test_ok(self):
+        assert subproc(msg='Test message', run=['which', 'bash'])
+
+    def test_err_no_exit(self):
+        assert not subproc(msg='Test message', run=['which', 'some123_bin'])
+
+    def test_err_with_exit(self):
+        with pytest.raises(SystemExit) as excinfo:
+            assert subproc(msg='Test message', run=['some123_bin'], exit_on_fail=True)
+        assert 'No such file or directory' in excinfo.value.code
+
+
+@pytest.mark.skipif(os.getlogin() == pwd.getpwuid(os.getuid())[0], reason='Not root - skip test')
+class TestSetRealOwner():
+    def test_ok(self, tmpdir):
+        real_user = os.getlogin()
+
+        path = os.path.join(tmpdir, 'some')
+        open(path).close()
+        real_user = set_real_owner(path)
+        file_owner = pwd.getpwuid(os.stat(path).st_uid).pw_name
+        assert file_owner != real_user
 
 
 class TestCheckKey():
     def test_not_exists(self, tmpdir):
         key = os.path.join(tmpdir, 'some.key')
-        assert not check_key(key)
+        assert not check_ca_key(key)
 
 
 class TestCheckCrt():
@@ -114,7 +141,7 @@ class TestNssFind():
 
 
 class TestNssInstall():
-    def test_nss_install(self, tmpdir):
+    def test_nss_install_cert(self, tmpdir):
         # create CA
         key = os.path.join(tmpdir, 'some.key')
         make_ca_key(key)
@@ -128,12 +155,12 @@ class TestNssInstall():
             subprocess.run(['certutil', '-N', '-d', nss, '--empty-password'], check=True)
 
         for nss in nss_dirs:
-            nss_install(nss=nss, crt=crt)
-            assert check_nss(nss=nss)
+            nss_install_cert(nss=nss, crt=crt)
+            assert nss_check_cert(nss=nss)
 
 
 class TestCheckNss():
-    def test_check_nss(self, tmpdir):
+    def test_nss_check_for_cert(self, tmpdir):
         key = os.path.join(tmpdir, 'some.key')
         make_ca_key(key)
         crt = os.path.join(tmpdir, 'some.crt')
@@ -142,10 +169,10 @@ class TestCheckNss():
         nss = os.path.join(tmpdir, 'my_nss')
         os.makedirs(nss)
         subprocess.run(['certutil', '-N', '-d', nss, '--empty-password'], check=True)
-        nss_install(nss=nss, crt=crt, cert_name='myname')
+        nss_install_cert(nss=nss, crt=crt, cert_name='myname')
 
-        assert not check_nss(nss=nss, cert_name='not myname')
-        assert check_nss(nss=nss, cert_name='myname')
+        assert not nss_check_cert(nss=nss, cert_name='not myname')
+        assert nss_check_cert(nss=nss, cert_name='myname')
 
 
 class TestDomain():

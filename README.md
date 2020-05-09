@@ -1,9 +1,9 @@
 swcert
 ======
 
-Browser trusted self signed certificate for localhost and any other
-Auto check and install CA for browsers
-Auto update Nginx certs
+Browser trusted self signed certificate for localhost and any other  
+Auto check and install CA for browsers  
+Auto update Nginx certs  
 
 Install
 -------

@@ -20,3 +20,17 @@ Usage
 ```bash
 sudo swcert localhost somehost.lan *.somehost.lan
 ```
+
+Windows host with Linux virtualbox
+----------------------------------
+
+Root CA should be installed manually for Windows browsers  
+Copy `~/.swcert/ca/swcert_CA.crt` from Linux
+
+### Chrome
+
+<chrome://settings/certificates> -> Authorities -> Import -> swcert_CA.crt  
+
+### Firefox
+
+<about:preferences#privacy> -> View ceritificates -> Authorities -> Import -> swcert_CA.crt  

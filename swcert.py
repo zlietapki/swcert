@@ -274,7 +274,6 @@ def main():
 
 
 if __name__ == '__main__':
-    # check params
     if len(sys.argv) < 2:
         usage()
     if sys.argv[1] == '-d' and len(sys.argv) < 3:

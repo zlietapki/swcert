@@ -1,7 +1,7 @@
 swcert
 ======
 
-Browser trusted self signed certificate for localhost and any other  
+Browser trusted self signed certificate for localhost and any other domain without warnings from browser  
 Auto check and install CA for browsers  
 Auto update Nginx certs  
 

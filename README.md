@@ -9,7 +9,7 @@ Install
 -------
 
 ```bash
-sudo apt install libnss3-tools
+sudo apt install libnss3-tools -y
 git clone git@github.com:zlietapki/swcert.git ~/.swcert
 sudo ln -s ~/.swcert/swcert.py /usr/local/bin/swcert
 ```

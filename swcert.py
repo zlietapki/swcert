@@ -8,6 +8,7 @@ import sys
 from os import listdir
 from os.path import basename, dirname, isfile
 
+# pylint: disable=pointless-string-statement
 '''
 Install
 git clone git@github.com:zlietapki/swcert.git ~/.swcert
@@ -41,8 +42,8 @@ CERT_CRT = os.path.join(SW_HOME, 'cert/swcert.crt')
 CERT_LIST = os.path.join(SW_HOME, 'cert/list.d')  # domains list as filenames
 
 NGINX_USE = True  # copy new certificate for nginx and reload nginx every time
-NGINX_KEY = '/etc/nginx/ssl/swcert.key'
-NGINX_CRT = '/etc/nginx/ssl/swcert.crt'
+NGINX_KEY = '/etc/swcert/swcert.key'
+NGINX_CRT = '/etc/swcert/swcert.crt'
 
 
 def subproc(msg, run, ok_msg='OK', fail_msg='error', exit_on_fail=False):

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
@@ -6,7 +7,7 @@ import sys
 
 from swcertificate import Ca, Cert, Nginx, Nss
 from swcertificate.gtkutils import TreeViewUtils
-from swcertificate.settings import NGINX_KEY, NGINX_CRT
+from swcertificate.settings import NGINX_KEY, NGINX_CRT, GLADE_MAIN_WINDOW
 from swcertificate import utils
 
 class Handlers():
@@ -56,7 +57,7 @@ class Handlers():
 class MainWindow(Gtk.Window):
     def __init__(self):
         self.builder = Gtk.Builder()
-        self.builder.add_from_file('glade/main.glade')
+        self.builder.add_from_file(GLADE_MAIN_WINDOW)
         self.builder.connect_signals(Handlers(builder=self.builder))
         self.builder.get_object('main_window').show()
 

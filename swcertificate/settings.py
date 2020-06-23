@@ -27,3 +27,5 @@ CERT_LIST = os.path.join(SW_HOME, 'cert/list.d')  # domains list as filenames
 NGINX_USE = True  # copy new certificate for nginx and reload nginx every time
 NGINX_KEY = '/etc/swcert/swcert.key'
 NGINX_CRT = '/etc/swcert/swcert.crt'
+
+GLADE_MAIN_WINDOW = os.path.join(SW_HOME, 'glade/main.glade')

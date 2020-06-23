@@ -1,17 +1,18 @@
-swcert
+SWCert
 ======
 
 Browser trusted self signed certificate for localhost and any other domain without warnings from browser  
 Auto check and install CA for browsers  
-Auto update Nginx certs  
+Auto update Nginx certificate  
 
 Install
 -------
 
 ```bash
-sudo apt install libnss3-tools -y
+sudo apt install libnss3-tools python3-gi -y
 git clone git@github.com:zlietapki/swcert.git ~/.swcert
 sudo ln -s ~/.swcert/swcert.py /usr/local/bin/swcert
+sudo ln -s ~/.swcert/swcert-gui.py /usr/local/bin/swcert-gui
 ```
 
 Usage

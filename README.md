@@ -11,8 +11,8 @@ Install
 ```bash
 sudo apt install libnss3-tools python3-gi -y
 git clone git@github.com:zlietapki/swcert.git ~/.swcert
-sudo ln -s ~/.swcert/swcert.py /usr/local/bin/swcert
-sudo ln -s ~/.swcert/swcert-gui.py /usr/local/bin/swcert-gui
+sudo ln -s -f ~/.swcert/swcert.py /usr/local/bin/swcert
+sudo ln -s -f ~/.swcert/swcert-gui.py /usr/local/bin/swcert-gui
 ```
 
 Usage

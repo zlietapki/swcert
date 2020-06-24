@@ -5,10 +5,11 @@ import sys
 from os import listdir
 from os.path import basename, dirname, isfile
 
-from .settings import (CA_CRT, CA_ETC_PATH, CA_KEY, CA_OS_PATH, CA_SRL,
-                       CERT_CRT, CERT_CSR, CERT_KEY, CERT_LIST, NSS_CERT_NAME,
-                       NSS_DIRS, NSS_NAME, SW_HOME)
 from . import utils
+from .settings import (CA_CRT, CA_ETC_PATH, CA_HOME, CA_KEY, CA_OS_PATH,
+                       CA_SRL, CERT_CRT, CERT_CSR, CERT_KEY, CERT_LIST,
+                       NSS_CERT_NAME, NSS_DIRS, NSS_NAME, SW_HOME)
+
 
 class Ca():
     @staticmethod
@@ -18,6 +19,8 @@ class Ca():
     def __init__(self, ca_key=CA_KEY, ca_crt=CA_CRT):
         self.ca_key = ca_key
         self.ca_crt = ca_crt
+        os.makedirs(CA_HOME, exist_ok=True)
+
 
     def find_or_new_ca_key(self):
         if not self.check_ca_key():
@@ -100,6 +103,7 @@ class Cert():
         self.csr = csr
         self.key = key
         self.crt = crt
+        os.makedirs(CERT_LIST, exist_ok=True)
 
     def list_domains(self):
         cert_list = self.cert_list

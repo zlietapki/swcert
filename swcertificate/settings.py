@@ -5,6 +5,7 @@ real_uid = int(os.environ.get('SUDO_UID', os.getuid()))
 USER_HOME = pwd.getpwuid(real_uid).pw_dir
 
 SW_HOME = os.path.join(USER_HOME, '.swcert')  # projects home
+# SW_HOME = '/home/asd/workspace/swcert'
 CA_HOME = os.path.join(SW_HOME, 'ca')
 CA_KEY = os.path.join(CA_HOME, 'swcert_CA.key')
 CA_CRT = os.path.join(CA_HOME, 'swcert_CA.crt')

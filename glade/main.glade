@@ -63,6 +63,7 @@
               <object class="GtkEntry" id="domain_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
                 <property name="placeholder_text" translatable="yes">domain name...</property>
               </object>
               <packing>

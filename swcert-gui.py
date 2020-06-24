@@ -41,7 +41,9 @@ class Handlers():
         TreeViewUtils.delete_record(self.domains_lst, selected_iter)
 
     def save(self, _widget):
+        self.add_domain(None) # add entered but not added domain
         widget_domains = TreeViewUtils.get_records(self.domains_lst)
+
         cert = Cert()
         # delete all domains
         existing_domains = cert.list_domains()

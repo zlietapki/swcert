@@ -47,12 +47,12 @@ class Ca():
             utils.set_real_owner(ca_crt)
 
         # check CA installed OS
-        if not Ca.check_crt(CA_OS_PATH):
-            utils.copy(ca_crt, CA_OS_PATH)
+        # if not Ca.check_crt(CA_OS_PATH):
+        utils.copy(ca_crt, CA_OS_PATH)
 
         # check CA installed to /etc
-        if not Ca.check_crt(CA_ETC_PATH):
-            utils.etc_install()
+        # if not Ca.check_crt(CA_ETC_PATH):
+        utils.etc_install()
 
     def make_ca_crt(self):
         ca_key = self.ca_key
@@ -96,8 +96,8 @@ class Nss():
             print('Browser certificates DB not found. Browsers will not trust your https')
             return False
         for nss_dir in found_nss_dirs:
-            if not Nss.check_cert(nss_dir=nss_dir):
-                Nss.install_cert(nss_dir=nss_dir, crt=self.ca_crt)
+            # if not Nss.check_cert(nss_dir=nss_dir):
+            Nss.install_cert(nss_dir=nss_dir, crt=self.ca_crt)
         return True
 
 class Cert():

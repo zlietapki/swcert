@@ -19,6 +19,7 @@ Usage
 -----
 
 ```bash
+sudo swcert-gui
 sudo swcert localhost somehost.lan *.somehost.lan
 ```
 

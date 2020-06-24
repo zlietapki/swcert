@@ -34,8 +34,8 @@ def copy(src, dst):
             os.makedirs(dst_dir)
         shutil.copyfile(src, dst)
     except PermissionError as e:
-        print('Error')
-        sys.exit(e.strerror + '. Run with `sudo`')
+        raise RuntimeError(e.strerror + '. Run with `sudo`')
+        # sys.exit(e.strerror + '. Run with `sudo`')
 
 def etc_install():
     subproc(msg='Update /etc/ssl/certs/', run=['update-ca-certificates', '--fresh'], exit_on_fail=True)

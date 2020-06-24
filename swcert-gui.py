@@ -2,13 +2,23 @@
 import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
+from gi.repository import GLib
 
 import sys
+import threading
+import time
 
 from swcertificate import Ca, Cert, Nginx, Nss
 from swcertificate.gtkutils import TreeViewUtils
 from swcertificate.settings import NGINX_KEY, NGINX_CRT, GLADE_MAIN_WINDOW
 from swcertificate import utils
+
+def threaded(fn):
+    def wrapper(*args, **kwargs):
+        threading.Thread(target=fn, args=args, kwargs=kwargs).start()
+    return wrapper
+
+
 
 class Handlers():
     def __init__(self, builder):
@@ -17,7 +27,12 @@ class Handlers():
         self.domains_lst = self.builder.get_object('domains_lst')
         self.entry = self.builder.get_object('domain_entry')
         self.restart_nginx = self.builder.get_object('restart_nginx')
+        self.message_widget = self.builder.get_object('message_widget')
+        self.message_label = self.builder.get_object('message_label')
+
         self.selected_iter = None
+
+        self.color_black = '#000000'
 
     def main_window_delete_event(self, _widget, _event):
         Gtk.main_quit()
@@ -26,14 +41,17 @@ class Handlers():
         selected_iter = selection.get_selected()[1]
         if selected_iter:
             self.selected_iter = selected_iter
-
             domain_name = TreeViewUtils.get_record(self.domains_lst, selected_iter)
-            self.entry.set_placeholder_text(domain_name)
+        else:
+            domain_name = ''
+        self.entry.set_placeholder_text(domain_name)
 
     def add_domain(self, _widget):
         domain_name = self.entry.get_text().strip()
         if domain_name:
             TreeViewUtils.add_record(self.domains_lst, [domain_name])
+        else:
+            self.display_message(self.color_black, 'Enter domain name')
         self.entry.set_text('')
 
     def remove_domain(self, _widget):
@@ -43,6 +61,8 @@ class Handlers():
     def save(self, _widget):
         self.add_domain(None) # add entered but not added domain
         widget_domains = TreeViewUtils.get_records(self.domains_lst)
+        if not widget_domains:
+            return
 
         cert = Cert()
         # delete all domains
@@ -53,8 +73,27 @@ class Handlers():
         for domain in widget_domains:
             cert.add_domain(domain)
         cert = issue_cert()
+        popup_msg = 'Certificate saved'
         if self.restart_nginx.get_active():
-            setup_nginx(cert)
+            try:
+                setup_nginx(cert)
+            except RuntimeError as e:
+                self.display_message(self.color_black, "Can't update Nginx\n" + str(e))
+                return
+            popup_msg += '\nNginx reloaded'
+        self.display_message(self.color_black, popup_msg)
+
+    def display_message(self, color, text):
+        markup = f'<span foreground="{ color }">{ text }</span>'
+        self.message_label.set_markup(markup)
+        self.message_widget.popup()
+        self.hide_message_timed()
+
+    @threaded
+    def hide_message_timed(self):
+        time.sleep(3)
+        GLib.idle_add(self.message_widget.popdown)
+
 
 class MainWindow(Gtk.Window):
     def __init__(self):
@@ -68,7 +107,7 @@ class MainWindow(Gtk.Window):
     def set_domains_list(self, treeview_id):
         domains_lst = self.builder.get_object(treeview_id)
 
-        TreeViewUtils.add_column_text(domains_lst, title='Domains')
+        TreeViewUtils.add_column_text(domains_lst, title='Trusted domains')
         model = TreeViewUtils.set_model(domains_lst)
 
         all_domains = Cert().list_domains()

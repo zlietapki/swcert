@@ -5,12 +5,13 @@ import subprocess
 import sys
 
 
-def subproc(msg, run, ok_msg='OK', fail_msg='error', exit_on_fail=False):
-    print(f'{msg} - ', end='')
+def subproc(run, msg=None, exit_on_fail=False):
+    '''return True False'''
+    if msg:
+        print(msg)
     try:
         subprocess.run(run, check=True, capture_output=True)
     except Exception as e:  # pylint: disable=broad-except
-        print(fail_msg)
         if hasattr(e, 'stderr'):
             err_msg = getattr(e, 'stderr').decode('utf-8')
         else:
@@ -19,8 +20,22 @@ def subproc(msg, run, ok_msg='OK', fail_msg='error', exit_on_fail=False):
         if exit_on_fail:
             sys.exit(err_msg)
         return False
-    print(ok_msg)
     return True
+
+def subproc_out(run, msg=None):
+    '''returns subproc.complete obj'''
+    if msg:
+        print(msg)
+
+    try:
+        complete = subprocess.run(run, check=True, capture_output=True)
+    except Exception as e:  # pylint: disable=broad-except
+        if hasattr(e, 'stderr'):
+            err_msg = getattr(e, 'stderr').decode('utf-8')
+        else:
+            err_msg = str(e)
+        raise RuntimeError(err_msg)
+    return complete
 
 def set_real_owner(path):
     owner = os.getlogin()

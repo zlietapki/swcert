@@ -9,14 +9,14 @@ from swcertificate import utils
 
 class TestSubproc():
     def test_ok(self):
-        assert utils.subproc(msg='Test message', run=['which', 'bash'])
+        assert utils.subproc(run=['which', 'bash'], msg='Test message')
 
     def test_err_no_exit(self):
-        assert not utils.subproc(msg='Test message', run=['which', 'some123_bin'])
+        assert not utils.subproc(run=['which', 'some123_bin'], msg='Test message')
 
     def test_err_with_exit(self):
         with pytest.raises(SystemExit) as excinfo:
-            assert utils.subproc(msg='Test message', run=['some123_bin'], exit_on_fail=True)
+            assert utils.subproc(run=['some123_bin'], msg='Test message', exit_on_fail=True)
         assert 'No such file or directory' in excinfo.value.code
 
 

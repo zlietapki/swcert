@@ -64,6 +64,8 @@ class Handlers():
         if not widget_domains:
             return
 
+        ca = setup_ca()
+
         cert = Cert()
         # delete all domains
         existing_domains = cert.list_domains()
@@ -72,7 +74,7 @@ class Handlers():
 
         for domain in widget_domains:
             cert.add_domain(domain)
-        cert = issue_cert()
+        cert = issue_cert(ca)
         popup_msg = 'Certificate saved'
         if self.restart_nginx.get_active():
             try:
@@ -114,7 +116,30 @@ class MainWindow(Gtk.Window):
         for domain_name in all_domains:
             model.append([domain_name])
 
-def issue_cert():
+def setup_ca():
+    # check CA key/crt or make new
+    ca = Ca()
+    ca.find_or_new_ca_key()
+    ca.find_or_new_ca_crt()
+
+    # setup NSS
+    ca_serial = Ca.get_crt_serial(ca.ca_crt)
+    if not utils.is_installed('certutil'):
+        sys.exit('Install `certutil` be your self.\nUbuntu ex.\n\tsudo apt install libnss3-tools\nBrowsers will not trust your https')
+
+    found_nss_dirs = Nss.find()
+    if not found_nss_dirs:
+        sys.exit('NSS dirs not found\nBrowsers will not trust your https')
+    for nss_dir in found_nss_dirs:
+        nss_ca_serial = Nss.get_crt_serial(nss_dir)
+        if not nss_ca_serial:
+            Nss.install_ca(nss_dir)
+        elif nss_ca_serial != ca_serial:
+            Nss.delete_cert(nss_dir)
+            Nss.install_ca(nss_dir)
+    return ca
+
+def issue_cert(ca):
     cert = Cert(ca)
     cert.issue_csr_key()
     cert.issue_cert()
@@ -130,17 +155,5 @@ def setup_nginx(cert):
 
 
 if __name__ == '__main__':
-    # check CA key/crt or make new
-    ca = Ca()
-    ca.find_or_new_ca_key()
-    ca.find_or_new_ca_crt()
-
-    # setup nss
-    if utils.is_installed('certutil'):
-        nss = Nss(ca_crt=ca.ca_crt)
-        nss.install_ca()
-    else:
-        sys.exit('Browsers will not trust your https\nInstall `certutil` be your self.\nUbuntu ex.\n\tsudo apt install libnss3-tools')
-
     MainWindow()
     Gtk.main()

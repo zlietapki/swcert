@@ -3,14 +3,10 @@ import os.path
 
 import pytest
 
-from swcertificate import Ca
+from swcertificate.ca import Ca
 
 
 class TestCheckCrt():
-    def test_not_exists(self, tmpdir):
-        crt = os.path.join(tmpdir, 'some.crt')
-        assert not Ca.check_crt(crt)
-
     def test_ok(self, tmpdir):
         ca_key = os.path.join(tmpdir, 'some.key')
         ca_crt = os.path.join(tmpdir, 'some.crt')
@@ -19,7 +15,13 @@ class TestCheckCrt():
         ca.make_ca_key()
         ca.make_ca_crt()
 
-        assert Ca.check_crt(ca_crt)
+        print(Ca.get_crt_serial(ca_crt))
+        assert Ca.get_crt_serial(ca_crt)
+
+    def test_not_exists(self, tmpdir):
+        crt = os.path.join(tmpdir, 'some.crt')
+        assert not Ca.get_crt_serial(crt)
+
 
 class TestCheckCaKey():
     def test_not_exists(self, tmpdir):

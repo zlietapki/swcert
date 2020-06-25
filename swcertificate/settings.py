@@ -9,10 +9,10 @@ CA_HOME = os.path.join(SW_HOME, 'ca')
 CA_KEY = os.path.join(CA_HOME, 'swcert_CA.key')
 CA_CRT = os.path.join(CA_HOME, 'swcert_CA.crt')
 
-NSS_DIRS = [  # find for browser CA database here
+NSS_DIRS = (  # find for browser CA database here
     os.path.join(USER_HOME, '.pki'),
     os.path.join(USER_HOME, '.mozilla'),
-]
+)
 NSS_NAME = 'cert9.db'  # browser DB filename
 NSS_CERT_NAME = 'swcert'  # install your new CA cert this name
 

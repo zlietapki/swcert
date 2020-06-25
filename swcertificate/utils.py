@@ -47,6 +47,7 @@ def copy(src, dst):
     try:
         if not os.path.exists(dst_dir):
             os.makedirs(dst_dir)
+            set_real_owner(dst_dir)
         shutil.copyfile(src, dst)
     except PermissionError as e:
         raise RuntimeError(e.strerror + '. Run with `sudo`')

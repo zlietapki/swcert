@@ -21,6 +21,7 @@ class Ca():
         self.ca_key = ca_key
         self.ca_crt = ca_crt
         os.makedirs(CA_HOME, exist_ok=True)
+        utils.set_real_owner(CA_HOME)
 
 
     def find_or_new_ca_key(self):

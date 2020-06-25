@@ -14,6 +14,7 @@ class Cert():
         self.key = key
         self.crt = crt
         os.makedirs(CERT_LIST, exist_ok=True)
+        utils.set_real_owner(CERT_LIST)
 
     def list_domains(self):
         cert_list = self.cert_list

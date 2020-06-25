@@ -45,8 +45,11 @@ if __name__ == '__main__':
 
     # check CA key/crt or make new
     ca = Ca()
-    ca.find_or_new_ca_key()
-    ca.find_or_new_ca_crt()
+    try:
+        ca.find_or_new_ca_key()
+        ca.find_or_new_ca_crt()
+    except RuntimeError as e:
+        sys.exit(e)
 
     # setup NSS
     ca_serial = Ca.get_crt_serial(ca.ca_crt)
@@ -72,8 +75,11 @@ if __name__ == '__main__':
     # install cert to nginx
     if NGINX_USE:
         if utils.is_installed('nginx'):
-            utils.copy(cert.key, NGINX_KEY)
-            utils.copy(cert.crt, NGINX_CRT)
+            try:
+                utils.copy(cert.key, NGINX_KEY)
+                utils.copy(cert.crt, NGINX_CRT)
+            except RuntimeError as e:
+                sys.exit(e)
 
             Nginx.restart()
             print('Dont forget edit nginx config')

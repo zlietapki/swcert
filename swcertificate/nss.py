@@ -26,8 +26,9 @@ class Nss():
             return False
 
         out_decoded = complete.stdout.decode('utf-8')
-        m = re.search(r'Serial Number:\n\s*([^\n]+)', out_decoded)
-        serial = m.group(1)
+        m = re.search(r'Serial Number:\n(.+\n.*)', out_decoded)
+        serial_dirty = m.group(1)
+        serial = re.sub(r'[^a-f0-9:]', '', serial_dirty)
         print(f'Serial { serial }')
         return serial
 

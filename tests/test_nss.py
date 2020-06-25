@@ -42,7 +42,8 @@ class TestGetSerial():
         Nss.install_ca(nss_dir, ca_crt, cert_name='test cert')
         # Check NSS CA
         serial = Nss.get_crt_serial(nss_dir, cert_name='test cert')
-        assert re.search(r'^(\w\w:)+$', serial)
+        assert len(serial) == 59
+        assert re.search(r'^[a-f0-9:]+$', serial)
 
 class TestDeleteCert():
     def test_ok(self, tmpdir):

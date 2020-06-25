@@ -1,5 +1,6 @@
 import os
 import os.path
+import re
 
 import pytest
 
@@ -15,8 +16,9 @@ class TestCheckCrt():
         ca.make_ca_key()
         ca.make_ca_crt()
 
-        print(Ca.get_crt_serial(ca_crt))
-        assert Ca.get_crt_serial(ca_crt)
+        serial = Ca.get_crt_serial(ca_crt)
+        assert len(serial) == 59
+        assert re.search(r'^[a-f0-9:]+$', serial)
 
     def test_not_exists(self, tmpdir):
         crt = os.path.join(tmpdir, 'some.crt')

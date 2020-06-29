@@ -7,7 +7,7 @@ from swcertificate import Ca, Nss
 from swcertificate.settings import NSS_NAME
 
 
-class TestNssFind():
+class TestNssFind:
     def test_not_found(self, tmpdir):
         folder = os.path.join(tmpdir, 'some/other/folder')
         os.makedirs(folder)
@@ -24,7 +24,8 @@ class TestNssFind():
         nss_dirs = Nss.find(nss_dirs=[tmpdir])
         assert folder in nss_dirs
 
-class TestGetSerial():
+
+class TestGetSerial:
     def test_ok(self, tmpdir):
         # create CA
         ca_key = os.path.join(tmpdir, 'some.key')
@@ -45,7 +46,8 @@ class TestGetSerial():
         assert len(serial) == 59
         assert re.search(r'^[a-f0-9:]+$', serial)
 
-class TestDeleteCert():
+
+class TestDeleteCert:
     def test_ok(self, tmpdir):
         # create CA
         ca_key = os.path.join(tmpdir, 'some.key')
@@ -99,7 +101,8 @@ class TestDeleteCert():
 
         assert not Nss.get_crt_serial(nss_dir, cert_name='test cert')
 
-class TestInstallCa():
+
+class TestInstallCa:
     def test_ok(self, tmpdir):
         # create CA
         ca_key = os.path.join(tmpdir, 'some.key')

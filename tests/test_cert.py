@@ -6,7 +6,7 @@ import pytest
 from swcertificate import Ca, Cert
 
 
-class TestListDomains():
+class TestListDomains:
     def test_ok(self, tmpdir):
         domain1 = os.path.join(tmpdir, 'domain')
         open(domain1, 'a').close()
@@ -26,14 +26,16 @@ class TestListDomains():
         names = cert.list_domains()
         assert not names
 
-class TestAddDomain():
+
+class TestAddDomain:
     def test_ok(self, tmpdir):
         cert = Cert(cert_list=tmpdir)
         cert.add_domain('some')
         names = cert.list_domains()
         assert 'some' in names
 
-class TestDeleteDomain():
+
+class TestDeleteDomain:
     def test_ok(self, tmpdir):
         cert = Cert(cert_list=tmpdir)
         cert.add_domain('some')
@@ -51,7 +53,8 @@ class TestDeleteDomain():
             cert.delete_domain('some')
         assert 'File not found' in excinfo.value.code
 
-class TestIssueCsrKey():
+
+class TestIssueCsrKey:
     def test_ok(self, tmpdir):
         csr = os.path.join(tmpdir, 'some.csr')
         key = os.path.join(tmpdir, 'some.key')
@@ -60,7 +63,8 @@ class TestIssueCsrKey():
         assert os.path.isfile(csr)
         assert os.path.isfile(key)
 
-class TestIssueCert():
+
+class TestIssueCert:
     def test_ok(self, tmpdir):
         ca_key = os.path.join(tmpdir, 'ca.key')
         ca_crt = os.path.join(tmpdir, 'ca.crt')

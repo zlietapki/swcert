@@ -5,12 +5,13 @@ from . import utils
 from .settings import CA_CRT, CA_ETC_PATH, CA_HOME, CA_KEY, CA_OS_PATH
 
 
-class Ca():
+class Ca:
     @staticmethod
     def get_crt_serial(crt):
-        '''returns Serial Number or False'''
+        """returns Serial Number or False"""
         try:
-            complete = utils.subproc_out(run=['openssl', 'x509', '-text', '-noout', '-in', crt], msg=f'Check CA crt {crt}')
+            complete = utils.subproc_out(run=['openssl', 'x509', '-text', '-noout', '-in', crt],
+                                         msg=f'Check CA crt {crt}')
         except RuntimeError:
             return False
         out_decoded = complete.stdout.decode('utf-8')
@@ -22,7 +23,6 @@ class Ca():
         self.ca_crt = ca_crt
         os.makedirs(CA_HOME, exist_ok=True)
         utils.set_real_owner(CA_HOME)
-
 
     def find_or_new_ca_key(self):
         if not self.check_ca_key():

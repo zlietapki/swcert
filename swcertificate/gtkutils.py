@@ -2,7 +2,8 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
-class TreeViewUtils():
+
+class TreeViewUtils:
     @staticmethod
     def add_column_text(treeview, title=None):
         renderer = Gtk.CellRendererText()

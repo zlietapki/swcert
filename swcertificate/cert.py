@@ -6,7 +6,7 @@ from . import utils
 from .settings import CA_SRL, CERT_CRT, CERT_CSR, CERT_KEY, CERT_LIST, SW_HOME
 
 
-class Cert():
+class Cert:
     def __init__(self, ca=None, cert_list=CERT_LIST, csr=CERT_CSR, key=CERT_KEY, crt=CERT_CRT):
         self.ca = ca
         self.cert_list = cert_list

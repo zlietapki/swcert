@@ -7,7 +7,7 @@ import pytest
 from swcertificate.ca import Ca
 
 
-class TestCheckCrt():
+class TestCheckCrt:
     def test_ok(self, tmpdir):
         ca_key = os.path.join(tmpdir, 'some.key')
         ca_crt = os.path.join(tmpdir, 'some.crt')
@@ -25,7 +25,7 @@ class TestCheckCrt():
         assert not Ca.get_crt_serial(crt)
 
 
-class TestCheckCaKey():
+class TestCheckCaKey:
     def test_not_exists(self, tmpdir):
         ca_key = os.path.join(tmpdir, 'some.key')
 
@@ -46,7 +46,7 @@ class TestCheckCaKey():
         assert ca.check_ca_key()
 
 
-class TestMakeCaKey():
+class TestMakeCaKey:
     def test_ok(self, tmpdir):
         ca_key = os.path.join(tmpdir, 'some.key')
         ca = Ca(ca_key=ca_key)
@@ -69,7 +69,8 @@ class TestMakeCaKey():
             ca.make_ca_key()
         assert 'Permission denied' in excinfo.value.code
 
-class TestMakeCaCrt():
+
+class TestMakeCaCrt:
     def test_ok(self, tmpdir):
         ca_key = os.path.join(tmpdir, 'some.key')
         ca_crt = os.path.join(tmpdir, 'some.crt')

@@ -7,7 +7,7 @@ import pytest
 from swcertificate import utils
 
 
-class TestSubproc():
+class TestSubproc:
     def test_ok(self):
         assert utils.subproc(run=['which', 'bash'], msg='Test message')
 
@@ -21,7 +21,7 @@ class TestSubproc():
 
 
 @pytest.mark.skipif(os.getlogin() == pwd.getpwuid(os.getuid())[0], reason='Not root - skip test')
-class TestSetRealOwner():
+class TestSetRealOwner:
     def test_ok(self, tmpdir):
         real_user = os.getlogin()
 
@@ -32,7 +32,7 @@ class TestSetRealOwner():
         assert file_owner != real_user
 
 
-class TestCopy():
+class TestCopy:
     def test_dst_dir_exists(self, tmpdir):
         src = os.path.join(tmpdir, 'file')
         open(src, 'a').close()
@@ -55,7 +55,8 @@ class TestCopy():
         utils.copy(src, dst)
         assert os.path.isfile(dst)
 
-class TestIsInstalled():
+
+class TestIsInstalled:
     def test_ok(self):
         assert utils.is_installed('echo')
 

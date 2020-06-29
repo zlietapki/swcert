@@ -5,7 +5,7 @@ from . import utils
 from .settings import CA_CRT, NSS_CERT_NAME, NSS_DIRS, NSS_NAME
 
 
-class Nss():
+class Nss:
     @staticmethod
     def find(nss_name=NSS_NAME, nss_dirs=NSS_DIRS):
         found_nss_dirs = []
@@ -14,7 +14,6 @@ class Nss():
                 if nss_name in files:
                     found_nss_dirs.append(root)
         return found_nss_dirs
-
 
     @staticmethod
     def get_crt_serial(nss_dir, cert_name=NSS_CERT_NAME):
@@ -29,7 +28,7 @@ class Nss():
         m = re.search(r'Serial Number:\n(.+\n.*)', out_decoded)
         serial_dirty = m.group(1)
         serial = re.sub(r'[^a-f0-9:]', '', serial_dirty)
-        print(f'Serial { serial }')
+        print(f'Serial {serial}')
         return serial
 
     @staticmethod
@@ -44,4 +43,5 @@ class Nss():
     @staticmethod
     def install_ca(nss_dir, ca_crt=CA_CRT, cert_name=NSS_CERT_NAME):
         print(f'Install NSS CA {cert_name} from {ca_crt} to {nss_dir}')
-        utils.subproc(run=['certutil', '-A', '-n', cert_name, '-t', 'TC,C,T', '-d', nss_dir, '-i', ca_crt], exit_on_fail=True)
+        utils.subproc(run=['certutil', '-A', '-n', cert_name, '-t', 'TC,C,T', '-d', nss_dir, '-i', ca_crt],
+                      exit_on_fail=True)

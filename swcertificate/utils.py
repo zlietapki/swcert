@@ -6,7 +6,7 @@ import sys
 
 
 def subproc(run, msg=None, exit_on_fail=False):
-    '''return True False'''
+    """return True False"""
     if msg:
         print(msg)
     try:
@@ -22,8 +22,9 @@ def subproc(run, msg=None, exit_on_fail=False):
         return False
     return True
 
+
 def subproc_out(run, msg=None):
-    '''returns subproc.complete obj'''
+    """returns subproc.complete obj"""
     if msg:
         print(msg)
 
@@ -37,9 +38,11 @@ def subproc_out(run, msg=None):
         raise RuntimeError(err_msg)
     return complete
 
+
 def set_real_owner(path):
     owner = os.getlogin()
     shutil.chown(path, user=owner, group=owner)
+
 
 def copy(src, dst):
     print(f'Copy {src} -> {dst}')
@@ -53,8 +56,10 @@ def copy(src, dst):
         raise RuntimeError(e.strerror + '. Run with `sudo`')
         # sys.exit(e.strerror + '. Run with `sudo`')
 
+
 def etc_install():
     subproc(msg='Update /etc/ssl/certs/', run=['update-ca-certificates', '--fresh'], exit_on_fail=True)
+
 
 def is_installed(binary_name):
     return subproc(msg=f'Check installed {binary_name}', run=['which', binary_name])

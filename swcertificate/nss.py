@@ -17,7 +17,7 @@ class Nss:
 
     @staticmethod
     def get_crt_serial(nss_dir, cert_name=NSS_CERT_NAME):
-        '''return Serial Number or False'''
+        """Return Serial Number or False"""
         print(f'Get NSS cert serial `{cert_name}` {nss_dir}')
         try:
             complete = utils.subproc_out(run=['certutil', '-L', '-n', cert_name, '-d', nss_dir])

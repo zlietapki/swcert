@@ -13,14 +13,15 @@ from swcertificate.gtkutils import TreeViewUtils
 from swcertificate.settings import NGINX_KEY, NGINX_CRT, GLADE_MAIN_WINDOW
 from swcertificate import utils
 
+
 def threaded(fn):
     def wrapper(*args, **kwargs):
         threading.Thread(target=fn, args=args, kwargs=kwargs).start()
+
     return wrapper
 
 
-
-class Handlers():
+class Handlers:
     def __init__(self, builder):
         self.builder = builder
 
@@ -59,7 +60,7 @@ class Handlers():
         TreeViewUtils.delete_record(self.domains_lst, selected_iter)
 
     def save(self, _widget):
-        self.add_domain(None) # add entered but not added domain
+        self.add_domain(None)  # add entered but not added domain
         widget_domains = TreeViewUtils.get_records(self.domains_lst)
         if not widget_domains:
             return
@@ -86,7 +87,7 @@ class Handlers():
         self.display_message(self.color_black, popup_msg)
 
     def display_message(self, color, text):
-        markup = f'<span foreground="{ color }">{ text }</span>'
+        markup = f'<span foreground="{color}">{text}</span>'
         self.message_label.set_markup(markup)
         self.message_widget.popup()
         self.hide_message_timed()
@@ -116,6 +117,7 @@ class MainWindow(Gtk.Window):
         for domain_name in all_domains:
             model.append([domain_name])
 
+
 def setup_ca():
     # check CA key/crt or make new
     ca = Ca()
@@ -125,7 +127,8 @@ def setup_ca():
     # setup NSS
     ca_serial = Ca.get_crt_serial(ca.ca_crt)
     if not utils.is_installed('certutil'):
-        sys.exit('Install `certutil` be your self.\nUbuntu ex.\n\tsudo apt install libnss3-tools\nBrowsers will not trust your https')
+        sys.exit('Install `certutil` be your self.\nUbuntu ex.\n\tsudo apt install libnss3-tools\nOr browsers will not '
+                 'trust your https')
 
     found_nss_dirs = Nss.find()
     if not found_nss_dirs:
@@ -139,11 +142,13 @@ def setup_ca():
             Nss.install_ca(nss_dir)
     return ca
 
+
 def issue_cert(ca):
     cert = Cert(ca)
     cert.issue_csr_key()
     cert.issue_cert()
     return cert
+
 
 def setup_nginx(cert):
     if not utils.is_installed('nginx'):

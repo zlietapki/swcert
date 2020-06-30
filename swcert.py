@@ -6,7 +6,6 @@ from swcertificate import Ca, Cert, Nginx, Nss
 from swcertificate.settings import NGINX_CRT, NGINX_KEY, NGINX_USE
 from swcertificate import utils
 
-
 # pylint: disable=pointless-string-statement
 '''
 Install
@@ -17,11 +16,13 @@ Usage:
 swcert localhost
 '''
 
+
 def usage():
     msg = 'Usage:\n'
     msg += f'\t{basename(__file__)} <domain_name> [<domain_name>...] - trust domain\n'
     msg += f'\t{basename(__file__)} -d <domain_name> [<domain_name>...] - forget domain\n'
     sys.exit(msg)
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -54,7 +55,8 @@ if __name__ == '__main__':
     # setup NSS
     ca_serial = Ca.get_crt_serial(ca.ca_crt)
     if not utils.is_installed('certutil'):
-        sys.exit('Install `certutil` be your self.\nUbuntu ex.\n\tsudo apt install libnss3-tools\nBrowsers will not trust your https')
+        sys.exit('Install `certutil` by your self.\nUbuntu ex.\n\tsudo apt install libnss3-tools\nOr browsers will not '
+                 'trust your https')
 
     found_nss_dirs = Nss.find()
     if not found_nss_dirs:
@@ -82,7 +84,7 @@ if __name__ == '__main__':
                 sys.exit(e)
 
             Nginx.restart()
-            print('Dont forget edit nginx config')
+            print("Don't forget edit nginx config")
             print('\tlisten 443 ssl http2;')
             print(f'\tssl_certificate_key {NGINX_KEY};')
             print(f'\tssl_certificate {NGINX_CRT};')
